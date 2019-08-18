@@ -11,13 +11,12 @@ import (
 )
 
 func main() {
-
 	port, err := strconv.Atoi(os.Getenv("PORT"))
 	if err != nil {
 		log.Fatal("PORT not defined")
 	}
 
-	http.HandleFunc("/", web.handler)
+	http.HandleFunc("/", web.Handler)
 
 	err = http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 	if err != nil {
