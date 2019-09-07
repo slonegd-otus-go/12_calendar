@@ -45,6 +45,14 @@ func (storage *Storage) Remove(id ID) {
 	storage.mtx.Unlock()
 }
 
+func (storage *Storage) Range(f func(id ID, event Event)) {
+	storage.mtx.Lock()
+	for id, event := range storage.events {
+		f(id, event)
+	}
+	storage.mtx.Unlock()
+}
+
 func (storage *Storage) Strings() []string {
 	var result []string
 	storage.mtx.RLock()
