@@ -9,49 +9,46 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/errors"
-	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/go-openapi/validate"
+	"github.com/go-openapi/swag"
 
 	strfmt "github.com/go-openapi/strfmt"
 )
 
-// NewListParams creates a new ListParams object
+// NewRemoveParams creates a new RemoveParams object
 // no default values defined in spec.
-func NewListParams() ListParams {
+func NewRemoveParams() RemoveParams {
 
-	return ListParams{}
+	return RemoveParams{}
 }
 
-// ListParams contains all the bound params for the list operation
+// RemoveParams contains all the bound params for the remove operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters List
-type ListParams struct {
+// swagger:parameters Remove
+type RemoveParams struct {
 
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
 	/*
 	  Required: true
-	  In: query
+	  In: path
 	*/
-	Date string
+	ID int64
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
 // for simple values it will use straight method calls.
 //
-// To ensure default values, the struct must have been initialized with NewListParams() beforehand.
-func (o *ListParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
+// To ensure default values, the struct must have been initialized with NewRemoveParams() beforehand.
+func (o *RemoveParams) BindRequest(r *http.Request, route *middleware.MatchedRoute) error {
 	var res []error
 
 	o.HTTPRequest = r
 
-	qs := runtime.Values(r.URL.Query())
-
-	qDate, qhkDate, _ := qs.GetOK("date")
-	if err := o.bindDate(qDate, qhkDate, route.Formats); err != nil {
+	rID, rhkID, _ := route.Params.GetOK("ID")
+	if err := o.bindID(rID, rhkID, route.Formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -61,23 +58,21 @@ func (o *ListParams) BindRequest(r *http.Request, route *middleware.MatchedRoute
 	return nil
 }
 
-// bindDate binds and validates parameter Date from query.
-func (o *ListParams) bindDate(rawData []string, hasKey bool, formats strfmt.Registry) error {
-	if !hasKey {
-		return errors.Required("date", "query")
-	}
+// bindID binds and validates parameter ID from path.
+func (o *RemoveParams) bindID(rawData []string, hasKey bool, formats strfmt.Registry) error {
 	var raw string
 	if len(rawData) > 0 {
 		raw = rawData[len(rawData)-1]
 	}
 
 	// Required: true
-	// AllowEmptyValue: false
-	if err := validate.RequiredString("date", "query", raw); err != nil {
-		return err
-	}
+	// Parameter is provided by construction from the route
 
-	o.Date = raw
+	value, err := swag.ConvertInt64(raw)
+	if err != nil {
+		return errors.InvalidType("ID", "path", "int64", raw)
+	}
+	o.ID = value
 
 	return nil
 }

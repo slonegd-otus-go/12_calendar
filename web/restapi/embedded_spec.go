@@ -44,7 +44,8 @@ func init() {
           {
             "type": "string",
             "name": "date",
-            "in": "query"
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
@@ -56,6 +57,9 @@ func init() {
                 "$ref": "#/definitions/Event"
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       },
@@ -75,7 +79,7 @@ func init() {
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Event Created",
             "schema": {
               "$ref": "#/definitions/Event"
@@ -83,6 +87,70 @@ func init() {
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/events/remove/{ID}": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "operationId": "Remove",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "name": "ID",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event removed"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Event Not Found"
+          }
+        }
+      }
+    },
+    "/events/update/{ID}": {
+      "post": {
+        "tags": [
+          "event"
+        ],
+        "operationId": "Update",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "name": "ID",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "event",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event Updated"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Event Not Found"
           }
         }
       }
@@ -177,7 +245,8 @@ func init() {
           {
             "type": "string",
             "name": "date",
-            "in": "query"
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
@@ -189,6 +258,9 @@ func init() {
                 "$ref": "#/definitions/Event"
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       },
@@ -208,7 +280,7 @@ func init() {
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Event Created",
             "schema": {
               "$ref": "#/definitions/Event"
@@ -216,6 +288,70 @@ func init() {
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/events/remove/{ID}": {
+      "get": {
+        "tags": [
+          "event"
+        ],
+        "operationId": "Remove",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "name": "ID",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event removed"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Event Not Found"
+          }
+        }
+      }
+    },
+    "/events/update/{ID}": {
+      "post": {
+        "tags": [
+          "event"
+        ],
+        "operationId": "Update",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "name": "ID",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "event",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Event"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event Updated"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Event Not Found"
           }
         }
       }

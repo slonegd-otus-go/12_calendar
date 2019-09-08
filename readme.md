@@ -102,10 +102,4 @@ API - предоставляет GRPC интерфейс для пользова
 * Создаем Docker образы, docker-compose, пишем интеграционный тест
 Тогда на каждом этапе можно будет получить осмысленный проект
 
-# Памятка по API
-список curl localhost:8080/events/
-
-один по id curl localhost:8080/events/{id}
-
-добавить curl -d '{"Date":"2006-01-02 15:04:05", "Duration":5, "Description":"сдать домашку"}' -H "Content-Type: application/json" -X POST http://localhost:8080/events/
 

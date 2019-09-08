@@ -48,6 +48,12 @@ func NewCalendarAPI(spec *loads.Document) *CalendarAPI {
 		EventListHandler: event.ListHandlerFunc(func(params event.ListParams) middleware.Responder {
 			return middleware.NotImplemented("operation EventList has not yet been implemented")
 		}),
+		EventRemoveHandler: event.RemoveHandlerFunc(func(params event.RemoveParams) middleware.Responder {
+			return middleware.NotImplemented("operation EventRemove has not yet been implemented")
+		}),
+		EventUpdateHandler: event.UpdateHandlerFunc(func(params event.UpdateParams) middleware.Responder {
+			return middleware.NotImplemented("operation EventUpdate has not yet been implemented")
+		}),
 	}
 }
 
@@ -85,6 +91,10 @@ type CalendarAPI struct {
 	EventGetHandler event.GetHandler
 	// EventListHandler sets the operation handler for the list operation
 	EventListHandler event.ListHandler
+	// EventRemoveHandler sets the operation handler for the remove operation
+	EventRemoveHandler event.RemoveHandler
+	// EventUpdateHandler sets the operation handler for the update operation
+	EventUpdateHandler event.UpdateHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -158,6 +168,14 @@ func (o *CalendarAPI) Validate() error {
 
 	if o.EventListHandler == nil {
 		unregistered = append(unregistered, "event.ListHandler")
+	}
+
+	if o.EventRemoveHandler == nil {
+		unregistered = append(unregistered, "event.RemoveHandler")
+	}
+
+	if o.EventUpdateHandler == nil {
+		unregistered = append(unregistered, "event.UpdateHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -272,6 +290,16 @@ func (o *CalendarAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/events"] = event.NewList(o.context, o.EventListHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/events/remove/{ID}"] = event.NewRemove(o.context, o.EventRemoveHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers["POST"] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/events/update/{ID}"] = event.NewUpdate(o.context, o.EventUpdateHandler)
 
 }
 

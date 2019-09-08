@@ -13,14 +13,14 @@ import (
 	models "github.com/slonegd-otus-go/12_calendar/web/models"
 )
 
-// CreateCreatedCode is the HTTP code returned for type CreateCreated
-const CreateCreatedCode int = 201
+// CreateOKCode is the HTTP code returned for type CreateOK
+const CreateOKCode int = 200
 
-/*CreateCreated Event Created
+/*CreateOK Event Created
 
-swagger:response createCreated
+swagger:response createOK
 */
-type CreateCreated struct {
+type CreateOK struct {
 
 	/*
 	  In: Body
@@ -28,27 +28,27 @@ type CreateCreated struct {
 	Payload *models.Event `json:"body,omitempty"`
 }
 
-// NewCreateCreated creates CreateCreated with default headers values
-func NewCreateCreated() *CreateCreated {
+// NewCreateOK creates CreateOK with default headers values
+func NewCreateOK() *CreateOK {
 
-	return &CreateCreated{}
+	return &CreateOK{}
 }
 
-// WithPayload adds the payload to the create created response
-func (o *CreateCreated) WithPayload(payload *models.Event) *CreateCreated {
+// WithPayload adds the payload to the create o k response
+func (o *CreateOK) WithPayload(payload *models.Event) *CreateOK {
 	o.Payload = payload
 	return o
 }
 
-// SetPayload sets the payload to the create created response
-func (o *CreateCreated) SetPayload(payload *models.Event) {
+// SetPayload sets the payload to the create o k response
+func (o *CreateOK) SetPayload(payload *models.Event) {
 	o.Payload = payload
 }
 
 // WriteResponse to the client
-func (o *CreateCreated) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+func (o *CreateOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
 
-	rw.WriteHeader(201)
+	rw.WriteHeader(200)
 	if o.Payload != nil {
 		payload := o.Payload
 		if err := producer.Produce(rw, payload); err != nil {

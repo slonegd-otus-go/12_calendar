@@ -59,3 +59,27 @@ func (o *ListOK) WriteResponse(rw http.ResponseWriter, producer runtime.Producer
 		panic(err) // let the recovery middleware deal with this
 	}
 }
+
+// ListBadRequestCode is the HTTP code returned for type ListBadRequest
+const ListBadRequestCode int = 400
+
+/*ListBadRequest Bad Request
+
+swagger:response listBadRequest
+*/
+type ListBadRequest struct {
+}
+
+// NewListBadRequest creates ListBadRequest with default headers values
+func NewListBadRequest() *ListBadRequest {
+
+	return &ListBadRequest{}
+}
+
+// WriteResponse to the client
+func (o *ListBadRequest) WriteResponse(rw http.ResponseWriter, producer runtime.Producer) {
+
+	rw.Header().Del(runtime.HeaderContentType) //Remove Content-Type on empty responses
+
+	rw.WriteHeader(400)
+}

@@ -19,7 +19,7 @@ paths:
         schema:
           $ref: '#/definitions/Event'
       responses:
-        201:
+        200:
           description: Event Created
           schema:
             $ref: '#/definitions/Event'
@@ -31,6 +31,7 @@ paths:
       parameters:
       - in: query
         name: date
+        required: true
         type: string
       responses:
         200:
@@ -39,6 +40,8 @@ paths:
             type: array
             items:
                 $ref: '#/definitions/Event'
+        400:
+          description: Bad Request
   /events/{eventID}:
     get:
       tags: [event]
@@ -58,23 +61,45 @@ paths:
           description: Bad Request
         404:
           description: Event Not Found
-  # /events/remove/{eventID}:
-  #   get:
-  #     tags: [event]
-  #     operationId: Remove
-  #     parameters:
-  #     - name: eventID
-  #       in: path
-  #       required: true
-  #       type: integer
-  #       format: int64
-  #     responses:
-  #       200:
-  #         description: Event removed
-  #       400:
-  #         description: Bad Request
-  #       404:
-  #         description: Event Not Found
+  /events/remove/{ID}:
+    get:
+      tags: [event]
+      operationId: Remove
+      parameters:
+      - name: ID
+        in: path
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Event removed
+        400:
+          description: Bad Request
+        404:
+          description: Event Not Found
+  /events/update/{ID}:
+    post:
+      tags: [event]
+      operationId: Update
+      parameters:
+      - name: ID
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/Event'
+      responses:
+        200:
+          description: Event Updated
+        400:
+          description: Bad Request
+        404:
+          description: Event Not Found
 
 definitions:
   Event:

@@ -9,6 +9,7 @@ require (
 	github.com/go-openapi/swag v0.19.5
 	github.com/go-openapi/validate v0.19.2
 	github.com/jessevdk/go-flags v1.4.0
+	github.com/pquerna/ffjson v0.0.0-20190813045741-dac163c6c0a9
 	github.com/slonegd-otus-go/swaggertest v0.0.0-20190907132150-2240c0e9c2df // indirect
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/net v0.0.0-20190813141303-74dc4d7220e7

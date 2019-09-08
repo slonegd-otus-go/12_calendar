@@ -49,6 +49,16 @@ func configureAPI(api *operations.CalendarAPI) http.Handler {
 			return middleware.NotImplemented("operation event.List has not yet been implemented")
 		})
 	}
+	if api.EventRemoveHandler == nil {
+		api.EventRemoveHandler = event.RemoveHandlerFunc(func(params event.RemoveParams) middleware.Responder {
+			return middleware.NotImplemented("operation event.Remove has not yet been implemented")
+		})
+	}
+	if api.EventUpdateHandler == nil {
+		api.EventUpdateHandler = event.UpdateHandlerFunc(func(params event.UpdateParams) middleware.Responder {
+			return middleware.NotImplemented("operation event.Update has not yet been implemented")
+		})
+	}
 
 	api.ServerShutdown = func() {}
 

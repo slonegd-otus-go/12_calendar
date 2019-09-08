@@ -12,7 +12,7 @@ type Event struct {
 	Duration    time.Duration
 }
 
-type ID uint
+type ID uint64
 
 type Storage struct {
 	mtx    sync.RWMutex
@@ -21,7 +21,7 @@ type Storage struct {
 }
 
 func NewStorage() *Storage {
-	return &Storage{events: make(map[ID]Event)}
+	return &Storage{events: make(map[ID]Event), id: 1}
 }
 
 func (storage *Storage) Add(event Event) ID {
@@ -33,16 +33,23 @@ func (storage *Storage) Add(event Event) ID {
 	return id
 }
 
-func (storage *Storage) Update(id ID, event Event) {
+func (storage *Storage) Update(id ID, event Event) (ok bool) {
 	storage.mtx.Lock()
+	defer storage.mtx.Unlock()
+	_, ok = storage.events[id]
+	if !ok {
+		return ok
+	}
 	storage.events[id] = event
-	storage.mtx.Unlock()
+	return ok
 }
 
-func (storage *Storage) Remove(id ID) {
+func (storage *Storage) Remove(id ID) (ok bool) {
 	storage.mtx.Lock()
+	_, ok = storage.events[id]
 	delete(storage.events, id)
 	storage.mtx.Unlock()
+	return ok
 }
 
 func (storage *Storage) Range(f func(id ID, event Event)) {
