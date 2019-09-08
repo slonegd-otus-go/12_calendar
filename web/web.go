@@ -26,8 +26,8 @@ func Run(port int, storage *event.Storage) {
 
 	server.Port = port
 
-	// api.JSONProducer = JSONProducer{}
-	// api.JSONConsumer = JSONConsumer{}
+	api.JSONProducer = JSONProducer{}
+	api.JSONConsumer = JSONConsumer{}
 
 	api.EventCreateHandler = eventapi.CreateHandlerFunc(
 		func(params eventapi.CreateParams) middleware.Responder {
