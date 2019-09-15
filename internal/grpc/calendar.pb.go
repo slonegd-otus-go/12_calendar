@@ -206,37 +206,203 @@ func (m *Succesfull) GetOk() bool {
 	return false
 }
 
+type GetResponse struct {
+	// Types that are valid to be assigned to Result:
+	//	*GetResponse_Event
+	//	*GetResponse_Error
+	Result               isGetResponse_Result `protobuf_oneof:"result"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
+}
+
+func (m *GetResponse) Reset()         { *m = GetResponse{} }
+func (m *GetResponse) String() string { return proto.CompactTextString(m) }
+func (*GetResponse) ProtoMessage()    {}
+func (*GetResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e3d25d49f056cdb2, []int{4}
+}
+
+func (m *GetResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetResponse.Unmarshal(m, b)
+}
+func (m *GetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetResponse.Marshal(b, m, deterministic)
+}
+func (m *GetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetResponse.Merge(m, src)
+}
+func (m *GetResponse) XXX_Size() int {
+	return xxx_messageInfo_GetResponse.Size(m)
+}
+func (m *GetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetResponse proto.InternalMessageInfo
+
+type isGetResponse_Result interface {
+	isGetResponse_Result()
+}
+
+type GetResponse_Event struct {
+	Event *Event `protobuf:"bytes,1,opt,name=event,proto3,oneof"`
+}
+
+type GetResponse_Error struct {
+	Error string `protobuf:"bytes,2,opt,name=error,proto3,oneof"`
+}
+
+func (*GetResponse_Event) isGetResponse_Result() {}
+
+func (*GetResponse_Error) isGetResponse_Result() {}
+
+func (m *GetResponse) GetResult() isGetResponse_Result {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
+func (m *GetResponse) GetEvent() *Event {
+	if x, ok := m.GetResult().(*GetResponse_Event); ok {
+		return x.Event
+	}
+	return nil
+}
+
+func (m *GetResponse) GetError() string {
+	if x, ok := m.GetResult().(*GetResponse_Error); ok {
+		return x.Error
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*GetResponse) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*GetResponse_Event)(nil),
+		(*GetResponse_Error)(nil),
+	}
+}
+
+type ChangeResponse struct {
+	// Types that are valid to be assigned to Result:
+	//	*ChangeResponse_Ok
+	//	*ChangeResponse_Error
+	Result               isChangeResponse_Result `protobuf_oneof:"result"`
+	XXX_NoUnkeyedLiteral struct{}                `json:"-"`
+	XXX_unrecognized     []byte                  `json:"-"`
+	XXX_sizecache        int32                   `json:"-"`
+}
+
+func (m *ChangeResponse) Reset()         { *m = ChangeResponse{} }
+func (m *ChangeResponse) String() string { return proto.CompactTextString(m) }
+func (*ChangeResponse) ProtoMessage()    {}
+func (*ChangeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e3d25d49f056cdb2, []int{5}
+}
+
+func (m *ChangeResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ChangeResponse.Unmarshal(m, b)
+}
+func (m *ChangeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ChangeResponse.Marshal(b, m, deterministic)
+}
+func (m *ChangeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ChangeResponse.Merge(m, src)
+}
+func (m *ChangeResponse) XXX_Size() int {
+	return xxx_messageInfo_ChangeResponse.Size(m)
+}
+func (m *ChangeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ChangeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ChangeResponse proto.InternalMessageInfo
+
+type isChangeResponse_Result interface {
+	isChangeResponse_Result()
+}
+
+type ChangeResponse_Ok struct {
+	Ok bool `protobuf:"varint,1,opt,name=ok,proto3,oneof"`
+}
+
+type ChangeResponse_Error struct {
+	Error string `protobuf:"bytes,2,opt,name=error,proto3,oneof"`
+}
+
+func (*ChangeResponse_Ok) isChangeResponse_Result() {}
+
+func (*ChangeResponse_Error) isChangeResponse_Result() {}
+
+func (m *ChangeResponse) GetResult() isChangeResponse_Result {
+	if m != nil {
+		return m.Result
+	}
+	return nil
+}
+
+func (m *ChangeResponse) GetOk() bool {
+	if x, ok := m.GetResult().(*ChangeResponse_Ok); ok {
+		return x.Ok
+	}
+	return false
+}
+
+func (m *ChangeResponse) GetError() string {
+	if x, ok := m.GetResult().(*ChangeResponse_Error); ok {
+		return x.Error
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ChangeResponse) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ChangeResponse_Ok)(nil),
+		(*ChangeResponse_Error)(nil),
+	}
+}
+
 func init() {
 	proto.RegisterType((*Event)(nil), "Event")
 	proto.RegisterType((*Events)(nil), "Events")
 	proto.RegisterType((*ID)(nil), "ID")
 	proto.RegisterType((*Succesfull)(nil), "Succesfull")
+	proto.RegisterType((*GetResponse)(nil), "GetResponse")
+	proto.RegisterType((*ChangeResponse)(nil), "ChangeResponse")
 }
 
 func init() { proto.RegisterFile("calendar.proto", fileDescriptor_e3d25d49f056cdb2) }
 
 var fileDescriptor_e3d25d49f056cdb2 = []byte{
-	// 309 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x50, 0x4f, 0x4f, 0xc2, 0x30,
-	0x14, 0x4f, 0x37, 0xac, 0xf0, 0x96, 0x70, 0x68, 0x3c, 0xcc, 0xc5, 0xe0, 0xb2, 0xd3, 0x4e, 0xc5,
-	0x60, 0xfc, 0x00, 0x0a, 0x86, 0x70, 0xad, 0x7a, 0xf1, 0x36, 0xd6, 0x07, 0x69, 0x18, 0x74, 0xe9,
-	0x3a, 0x3e, 0x8f, 0xf1, 0x93, 0x1a, 0x4a, 0x47, 0x08, 0x24, 0x9e, 0xb6, 0xbe, 0xdf, 0x9f, 0xf7,
-	0x7b, 0x3f, 0x18, 0x96, 0x45, 0x85, 0x3b, 0x59, 0x18, 0x5e, 0x1b, 0x6d, 0x75, 0xf2, 0xb8, 0xd6,
-	0x7a, 0x5d, 0xe1, 0xd8, 0xbd, 0x96, 0xed, 0x6a, 0x6c, 0xd5, 0x16, 0x1b, 0x5b, 0x6c, 0x6b, 0x4f,
-	0x18, 0x5d, 0x12, 0x64, 0x6b, 0x0a, 0xab, 0xf4, 0xee, 0x88, 0x67, 0x3f, 0x04, 0x6e, 0xde, 0xf7,
-	0xb8, 0xb3, 0x6c, 0x08, 0x81, 0x92, 0x31, 0x49, 0x49, 0x1e, 0x8a, 0x40, 0x49, 0xc6, 0xa1, 0x27,
-	0x0b, 0x8b, 0x71, 0x90, 0x92, 0x3c, 0x9a, 0x24, 0xfc, 0x68, 0xc4, 0x3b, 0x23, 0xfe, 0xd9, 0x6d,
-	0x12, 0x8e, 0xc7, 0x5e, 0xa0, 0xdf, 0x79, 0xc7, 0xa1, 0xd3, 0xdc, 0x5f, 0x69, 0x66, 0x9e, 0x20,
-	0x4e, 0x54, 0x96, 0x42, 0x24, 0xb1, 0x29, 0x8d, 0xaa, 0x9d, 0xb2, 0x97, 0x92, 0x7c, 0x20, 0xce,
-	0x47, 0x59, 0x0e, 0xd4, 0x25, 0x6c, 0xd8, 0x08, 0x28, 0xba, 0xbf, 0x98, 0xa4, 0x61, 0x1e, 0x4d,
-	0x28, 0x77, 0x80, 0xf0, 0xd3, 0xec, 0x0e, 0x82, 0xc5, 0xec, 0xf2, 0x90, 0xec, 0x01, 0xe0, 0xa3,
-	0x2d, 0x4b, 0x6c, 0x56, 0x6d, 0x55, 0x1d, 0x50, 0xbd, 0x71, 0x68, 0x5f, 0x04, 0x7a, 0x33, 0xf9,
-	0x25, 0xd0, 0x9f, 0xfa, 0x52, 0x59, 0x0c, 0x74, 0x6a, 0xf0, 0x70, 0x8d, 0xb7, 0x4e, 0xfc, 0x97,
-	0x3d, 0xc1, 0x60, 0x8e, 0xf6, 0xb5, 0xb4, 0x6a, 0x8f, 0xec, 0x9f, 0x32, 0x92, 0x5b, 0xee, 0xc3,
-	0x32, 0x08, 0xe7, 0x68, 0x59, 0xc8, 0x17, 0xb3, 0x93, 0x4b, 0x02, 0x54, 0xe0, 0x56, 0xef, 0xf1,
-	0x38, 0x8e, 0xf8, 0x59, 0xb0, 0x04, 0xe8, 0x57, 0xed, 0x9a, 0xbc, 0xc2, 0xde, 0xe8, 0x77, 0x6f,
-	0x6d, 0xea, 0x72, 0x49, 0xdd, 0xc2, 0xe7, 0xbf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xa9, 0x5e, 0xd0,
-	0xc1, 0x07, 0x02, 0x00, 0x00,
+	// 381 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x51, 0xd1, 0x8e, 0x93, 0x40,
+	0x14, 0x2d, 0xd0, 0x8e, 0xf4, 0x62, 0xaa, 0x99, 0x18, 0x83, 0xc4, 0x54, 0xe4, 0x89, 0xa7, 0xa9,
+	0xa9, 0xf1, 0x03, 0x6c, 0x31, 0x6d, 0x9f, 0x4c, 0x46, 0x7d, 0xf1, 0x8d, 0xc2, 0x2d, 0x92, 0x52,
+	0x86, 0x0c, 0x43, 0xbf, 0xc7, 0x7f, 0xd8, 0x1f, 0xdc, 0x30, 0xd0, 0x6e, 0x97, 0x4d, 0x76, 0x9f,
+	0x60, 0xee, 0x39, 0xf7, 0x9c, 0x73, 0xef, 0x85, 0x59, 0x12, 0x17, 0x58, 0xa6, 0xb1, 0x64, 0x95,
+	0x14, 0x4a, 0x78, 0x9f, 0x32, 0x21, 0xb2, 0x02, 0x17, 0xfa, 0xb5, 0x6f, 0x0e, 0x0b, 0x95, 0x9f,
+	0xb0, 0x56, 0xf1, 0xa9, 0xea, 0x09, 0xf3, 0x21, 0x21, 0x6d, 0x64, 0xac, 0x72, 0x51, 0x76, 0x78,
+	0xf0, 0xdf, 0x80, 0xc9, 0x8f, 0x33, 0x96, 0x8a, 0xce, 0xc0, 0xcc, 0x53, 0xd7, 0xf0, 0x8d, 0xd0,
+	0xe2, 0x66, 0x9e, 0x52, 0x06, 0xe3, 0x34, 0x56, 0xe8, 0x9a, 0xbe, 0x11, 0x3a, 0x4b, 0x8f, 0x75,
+	0x42, 0xec, 0x22, 0xc4, 0x7e, 0x5f, 0x9c, 0xb8, 0xe6, 0xd1, 0x6f, 0x60, 0x5f, 0xb4, 0x5d, 0x4b,
+	0xf7, 0x7c, 0x78, 0xd2, 0x13, 0xf5, 0x04, 0x7e, 0xa5, 0x52, 0x1f, 0x9c, 0x14, 0xeb, 0x44, 0xe6,
+	0x95, 0xee, 0x1c, 0xfb, 0x46, 0x38, 0xe5, 0xb7, 0xa5, 0x20, 0x04, 0xa2, 0x13, 0xd6, 0x74, 0x0e,
+	0x04, 0xf5, 0x9f, 0x6b, 0xf8, 0x56, 0xe8, 0x2c, 0x09, 0xd3, 0x00, 0xef, 0xab, 0xc1, 0x3b, 0x30,
+	0x77, 0xd1, 0x70, 0x90, 0xe0, 0x23, 0xc0, 0xaf, 0x26, 0x49, 0xb0, 0x3e, 0x34, 0x45, 0xd1, 0xa2,
+	0xe2, 0xa8, 0x51, 0x9b, 0x9b, 0xe2, 0x18, 0xfc, 0x04, 0x67, 0x83, 0x8a, 0x63, 0x5d, 0x89, 0xb2,
+	0x46, 0x3a, 0x87, 0x89, 0x16, 0xd3, 0x8c, 0xab, 0xc3, 0x76, 0xc4, 0xbb, 0x32, 0x7d, 0x0f, 0x13,
+	0x94, 0x52, 0x48, 0xbd, 0x96, 0xa9, 0xae, 0xb7, 0xcf, 0x95, 0x0d, 0x44, 0x62, 0xdd, 0x14, 0x2a,
+	0x88, 0x60, 0xb6, 0xfe, 0x17, 0x97, 0x19, 0x5e, 0x35, 0xdf, 0x3e, 0x58, 0x6e, 0x47, 0xad, 0xe9,
+	0xcb, 0x2a, 0xcb, 0x3b, 0x03, 0xec, 0x75, 0x7f, 0x6b, 0xea, 0x02, 0x59, 0x4b, 0x6c, 0x97, 0xdc,
+	0xe7, 0xf1, 0xfa, 0x2f, 0xfd, 0x02, 0xd3, 0x0d, 0xaa, 0xef, 0x89, 0xca, 0xcf, 0x48, 0x9f, 0xb9,
+	0x91, 0xf7, 0x8a, 0xf5, 0x3b, 0x74, 0xc1, 0xda, 0xa0, 0xa2, 0x16, 0xdb, 0x45, 0xde, 0x6b, 0xf6,
+	0x78, 0x74, 0xc2, 0xf1, 0x24, 0xce, 0xd8, 0x81, 0x6f, 0xd8, 0x60, 0x8c, 0xcf, 0x40, 0xfe, 0x54,
+	0xe9, 0x6d, 0x8a, 0x21, 0x65, 0x45, 0xfe, 0x8e, 0x33, 0x59, 0x25, 0x7b, 0xa2, 0x13, 0x7c, 0xbd,
+	0x0f, 0x00, 0x00, 0xff, 0xff, 0x17, 0x57, 0x3a, 0x42, 0xaf, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -253,9 +419,9 @@ const _ = grpc.SupportPackageIsVersion4
 type CalendarClient interface {
 	Create(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error)
 	GetActive(ctx context.Context, in *timestamp.Timestamp, opts ...grpc.CallOption) (*Events, error)
-	Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Event, error)
-	Remove(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Succesfull, error)
-	Update(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Succesfull, error)
+	Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*GetResponse, error)
+	Remove(ctx context.Context, in *ID, opts ...grpc.CallOption) (*ChangeResponse, error)
+	Update(ctx context.Context, in *Event, opts ...grpc.CallOption) (*ChangeResponse, error)
 }
 
 type calendarClient struct {
@@ -284,8 +450,8 @@ func (c *calendarClient) GetActive(ctx context.Context, in *timestamp.Timestamp,
 	return out, nil
 }
 
-func (c *calendarClient) Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Event, error) {
-	out := new(Event)
+func (c *calendarClient) Get(ctx context.Context, in *ID, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
 	err := c.cc.Invoke(ctx, "/Calendar/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -293,8 +459,8 @@ func (c *calendarClient) Get(ctx context.Context, in *ID, opts ...grpc.CallOptio
 	return out, nil
 }
 
-func (c *calendarClient) Remove(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Succesfull, error) {
-	out := new(Succesfull)
+func (c *calendarClient) Remove(ctx context.Context, in *ID, opts ...grpc.CallOption) (*ChangeResponse, error) {
+	out := new(ChangeResponse)
 	err := c.cc.Invoke(ctx, "/Calendar/Remove", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -302,8 +468,8 @@ func (c *calendarClient) Remove(ctx context.Context, in *ID, opts ...grpc.CallOp
 	return out, nil
 }
 
-func (c *calendarClient) Update(ctx context.Context, in *ID, opts ...grpc.CallOption) (*Succesfull, error) {
-	out := new(Succesfull)
+func (c *calendarClient) Update(ctx context.Context, in *Event, opts ...grpc.CallOption) (*ChangeResponse, error) {
+	out := new(ChangeResponse)
 	err := c.cc.Invoke(ctx, "/Calendar/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -315,9 +481,9 @@ func (c *calendarClient) Update(ctx context.Context, in *ID, opts ...grpc.CallOp
 type CalendarServer interface {
 	Create(context.Context, *Event) (*Event, error)
 	GetActive(context.Context, *timestamp.Timestamp) (*Events, error)
-	Get(context.Context, *ID) (*Event, error)
-	Remove(context.Context, *ID) (*Succesfull, error)
-	Update(context.Context, *ID) (*Succesfull, error)
+	Get(context.Context, *ID) (*GetResponse, error)
+	Remove(context.Context, *ID) (*ChangeResponse, error)
+	Update(context.Context, *Event) (*ChangeResponse, error)
 }
 
 // UnimplementedCalendarServer can be embedded to have forward compatible implementations.
@@ -330,13 +496,13 @@ func (*UnimplementedCalendarServer) Create(ctx context.Context, req *Event) (*Ev
 func (*UnimplementedCalendarServer) GetActive(ctx context.Context, req *timestamp.Timestamp) (*Events, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetActive not implemented")
 }
-func (*UnimplementedCalendarServer) Get(ctx context.Context, req *ID) (*Event, error) {
+func (*UnimplementedCalendarServer) Get(ctx context.Context, req *ID) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (*UnimplementedCalendarServer) Remove(ctx context.Context, req *ID) (*Succesfull, error) {
+func (*UnimplementedCalendarServer) Remove(ctx context.Context, req *ID) (*ChangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Remove not implemented")
 }
-func (*UnimplementedCalendarServer) Update(ctx context.Context, req *ID) (*Succesfull, error) {
+func (*UnimplementedCalendarServer) Update(ctx context.Context, req *Event) (*ChangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 
@@ -417,7 +583,7 @@ func _Calendar_Remove_Handler(srv interface{}, ctx context.Context, dec func(int
 }
 
 func _Calendar_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ID)
+	in := new(Event)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -429,7 +595,7 @@ func _Calendar_Update_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/Calendar/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CalendarServer).Update(ctx, req.(*ID))
+		return srv.(CalendarServer).Update(ctx, req.(*Event))
 	}
 	return interceptor(ctx, in, info, handler)
 }

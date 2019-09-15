@@ -60,6 +60,13 @@ func (storage *Storage) Range(f func(id ID, event Event)) {
 	storage.mtx.Unlock()
 }
 
+func (storage *Storage) Get(id ID) (event Event, ok bool) {
+	storage.mtx.RLock()
+	event, ok = storage.events[id]
+	storage.mtx.RUnlock()
+	return event, ok
+}
+
 func (storage *Storage) Strings() []string {
 	var result []string
 	storage.mtx.RLock()

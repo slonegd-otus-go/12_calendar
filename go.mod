@@ -15,6 +15,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.3 // indirect
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/kr/pty v1.1.8 // indirect
+	github.com/otusteam/go/cleancalendar v0.0.0-20190910155624-a2ed29c4e4dc
 	github.com/pquerna/ffjson v0.0.0-20190813045741-dac163c6c0a9
 	github.com/rogpeppe/go-internal v1.3.2 // indirect
 	github.com/slonegd-otus-go/swaggertest v0.0.0-20190907132150-2240c0e9c2df // indirect

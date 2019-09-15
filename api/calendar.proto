@@ -24,12 +24,26 @@ message Succesfull {
     bool ok = 1;
 }
 
+message GetResponse {
+    oneof result {
+        Event event = 1;
+        string error = 2;
+    }
+}
+
+message ChangeResponse {
+    oneof result {
+        bool ok = 1;
+        string error = 2;
+    }
+}
+
 service Calendar {
     rpc Create(Event) returns (Event);
     rpc GetActive(google.protobuf.Timestamp) returns (Events);
-    rpc Get(ID) returns (Event);
-    rpc Remove(ID) returns (Succesfull);
-    rpc Update(ID) returns (Succesfull);
+    rpc Get(ID) returns (GetResponse);
+    rpc Remove(ID) returns (ChangeResponse);
+    rpc Update(Event) returns (ChangeResponse);
 };
 
 
