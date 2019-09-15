@@ -19,6 +19,7 @@ require (
 	github.com/pquerna/ffjson v0.0.0-20190813045741-dac163c6c0a9
 	github.com/rogpeppe/go-internal v1.3.2 // indirect
 	github.com/slonegd-otus-go/swaggertest v0.0.0-20190907132150-2240c0e9c2df // indirect
+	github.com/spf13/cobra v0.0.5
 	github.com/stretchr/testify v1.4.0
 	go.opencensus.io v0.22.1 // indirect
 	golang.org/x/crypto v0.0.0-20190911031432-227b76d455e7 // indirect

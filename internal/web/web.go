@@ -14,7 +14,7 @@ import (
 	eventapi "github.com/slonegd-otus-go/12_calendar/internal/web/restapi/operations/event"
 )
 
-func Run(port int, storage *event.Storage) {
+func Run(host string, port int, storage *event.Storage) {
 	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
 	if err != nil {
 		log.Fatalln(err)
@@ -24,6 +24,7 @@ func Run(port int, storage *event.Storage) {
 	server := restapi.NewServer(api)
 	defer server.Shutdown()
 
+	server.Host = host
 	server.Port = port
 
 	api.JSONProducer = JSONProducer{}
