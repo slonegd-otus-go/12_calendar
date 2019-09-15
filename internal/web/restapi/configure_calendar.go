@@ -14,7 +14,7 @@ import (
 	"github.com/slonegd-otus-go/12_calendar/internal/web/restapi/operations/event"
 )
 
-//go:generate swagger generate server --target ../../web --name Calendar --spec ../../../api/swagger.yml --exclude-main
+// go:generate swagger generate server --target ../../web --name Calendar --spec ../../../api/swagger.yml --exclude-main
 
 func configureFlags(api *operations.CalendarAPI) {
 	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }

@@ -1,5 +1,3 @@
-//go:generate swagger generate server --target=./internal/web --spec=./api/swagger.yml --exclude-main
-//go:generate ffjson ./internal/web/models/event.go
 package main
 
 import (
