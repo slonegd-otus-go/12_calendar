@@ -13,7 +13,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
-	models "github.com/slonegd-otus-go/12_calendar/web/models"
+	models "github.com/slonegd-otus-go/12_calendar/internal/web/models"
 )
 
 // NewCreateParams creates a new CreateParams object

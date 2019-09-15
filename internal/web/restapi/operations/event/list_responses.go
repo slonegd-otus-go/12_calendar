@@ -10,7 +10,7 @@ import (
 
 	"github.com/go-openapi/runtime"
 
-	models "github.com/slonegd-otus-go/12_calendar/web/models"
+	models "github.com/slonegd-otus-go/12_calendar/internal/web/models"
 )
 
 // ListOKCode is the HTTP code returned for type ListOK

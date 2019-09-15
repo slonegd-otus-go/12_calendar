@@ -8,10 +8,10 @@ import (
 	"github.com/go-openapi/runtime/middleware"
 
 	"github.com/slonegd-otus-go/12_calendar/internal/event"
-	"github.com/slonegd-otus-go/12_calendar/web/models"
-	"github.com/slonegd-otus-go/12_calendar/web/restapi"
-	"github.com/slonegd-otus-go/12_calendar/web/restapi/operations"
-	eventapi "github.com/slonegd-otus-go/12_calendar/web/restapi/operations/event"
+	"github.com/slonegd-otus-go/12_calendar/internal/web/models"
+	"github.com/slonegd-otus-go/12_calendar/internal/web/restapi"
+	"github.com/slonegd-otus-go/12_calendar/internal/web/restapi/operations"
+	eventapi "github.com/slonegd-otus-go/12_calendar/internal/web/restapi/operations/event"
 )
 
 func Run(port int, storage *event.Storage) {

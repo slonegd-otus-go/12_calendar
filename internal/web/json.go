@@ -5,7 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/slonegd-otus-go/12_calendar/web/models"
+	"github.com/slonegd-otus-go/12_calendar/internal/web/models"
 )
 
 type JSONConsumer struct{}

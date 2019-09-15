@@ -16,7 +16,7 @@ import (
 
 	strfmt "github.com/go-openapi/strfmt"
 
-	models "github.com/slonegd-otus-go/12_calendar/web/models"
+	models "github.com/slonegd-otus-go/12_calendar/internal/web/models"
 )
 
 // NewUpdateParams creates a new UpdateParams object

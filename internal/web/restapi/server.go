@@ -25,7 +25,7 @@ import (
 	flags "github.com/jessevdk/go-flags"
 	"golang.org/x/net/netutil"
 
-	"github.com/slonegd-otus-go/12_calendar/web/restapi/operations"
+	"github.com/slonegd-otus-go/12_calendar/internal/web/restapi/operations"
 )
 
 const (

@@ -19,7 +19,7 @@ import (
 	strfmt "github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 
-	"github.com/slonegd-otus-go/12_calendar/web/restapi/operations/event"
+	"github.com/slonegd-otus-go/12_calendar/internal/web/restapi/operations/event"
 )
 
 // NewCalendarAPI creates a new Calendar instance
