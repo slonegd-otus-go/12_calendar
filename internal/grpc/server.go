@@ -2,8 +2,8 @@ package grpc
 
 import (
 	"context"
-	"time"
 	"fmt"
+	"time"
 
 	// "net"
 	// "time"
@@ -58,7 +58,7 @@ func (server *Server) GetActive(_ context.Context, dateRequest *timestamp.Timest
 	if err != nil {
 		return nil, err
 	}
-	var events *Events
+	events := &Events{}
 	server.storage.Range(func(id event.ID, event event.Event) {
 		if date.After(event.Date) && event.Date.Add(event.Duration).After(date) {
 			date, err := ptypes.TimestampProto(event.Date)
@@ -82,7 +82,7 @@ func (server *Server) Get(_ context.Context, id *ID) (*GetResponse, error) {
 	event, ok := server.storage.Get(event.ID(id.Id))
 
 	if !ok {
-		return &GetResponse{ Result: &GetResponse_Error{
+		return &GetResponse{Result: &GetResponse_Error{
 			fmt.Sprintf("dont have event for id %d", id.Id),
 		}}, nil
 	}
@@ -90,10 +90,10 @@ func (server *Server) Get(_ context.Context, id *ID) (*GetResponse, error) {
 	date, err := ptypes.TimestampProto(event.Date)
 	if err != nil {
 		return nil, err
-	}	
+	}
 	duration := ptypes.DurationProto(event.Duration)
 
-	return &GetResponse{ Result: &GetResponse_Event{ &Event{
+	return &GetResponse{Result: &GetResponse_Event{&Event{
 		Id:          id.Id,
 		Date:        date,
 		Duration:    duration,
@@ -105,12 +105,12 @@ func (server *Server) Remove(_ context.Context, id *ID) (*ChangeResponse, error)
 	ok := server.storage.Remove(event.ID(id.Id))
 
 	if !ok {
-		return &ChangeResponse{ Result: &ChangeResponse_Error{
+		return &ChangeResponse{Result: &ChangeResponse_Error{
 			fmt.Sprintf("dont have event for id %d", id.Id),
 		}}, nil
 	}
 
-	return &ChangeResponse{ Result: &ChangeResponse_Ok{ok}}, nil
+	return &ChangeResponse{Result: &ChangeResponse_Ok{ok}}, nil
 }
 
 func (server *Server) Update(_ context.Context, eventRequest *Event) (*ChangeResponse, error) {
@@ -141,10 +141,10 @@ func (server *Server) Update(_ context.Context, eventRequest *Event) (*ChangeRes
 	})
 
 	if !ok {
-		return &ChangeResponse{ Result: &ChangeResponse_Error{
+		return &ChangeResponse{Result: &ChangeResponse_Error{
 			fmt.Sprintf("dont have event for id %d", id),
 		}}, nil
 	}
 
-	return &ChangeResponse{ Result: &ChangeResponse_Ok{ok}}, nil
+	return &ChangeResponse{Result: &ChangeResponse_Ok{ok}}, nil
 }
