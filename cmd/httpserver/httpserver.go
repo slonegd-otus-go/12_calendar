@@ -3,7 +3,7 @@ package httpserver
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/slonegd-otus-go/12_calendar/internal/event"
+	"github.com/slonegd-otus-go/12_calendar/internal/event/mapstorage"
 	"github.com/slonegd-otus-go/12_calendar/internal/web"
 )
 
@@ -14,7 +14,7 @@ var Command = &cobra.Command{
 	Use:   "httpserver",
 	Short: "Run http server",
 	Run: func(cmd *cobra.Command, args []string) {
-		storage := event.NewStorage()
+		storage := mapstorage.New()
 		web.Run(host, port, storage)
 	},
 }

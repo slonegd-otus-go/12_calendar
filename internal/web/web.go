@@ -14,7 +14,7 @@ import (
 	eventapi "github.com/slonegd-otus-go/12_calendar/internal/web/restapi/operations/event"
 )
 
-func Run(host string, port int, storage *event.Storage) {
+func Run(host string, port int, storage event.Storage) {
 	swaggerSpec, err := loads.Analyzed(restapi.SwaggerJSON, "")
 	if err != nil {
 		log.Fatalln(err)
@@ -51,10 +51,12 @@ func Run(host string, port int, storage *event.Storage) {
 	api.EventGetHandler = eventapi.GetHandlerFunc(
 		func(params eventapi.GetParams) middleware.Responder {
 			var resultEvent *event.Event
-			storage.Range(func(id event.ID, event event.Event) {
+			storage.Range(func(id event.ID, event event.Event) bool {
 				if int64(id) == params.EventID {
 					resultEvent = &event
+					return false
 				}
+				return true
 			})
 			if resultEvent == nil {
 				return eventapi.NewGetNotFound()
@@ -76,7 +78,7 @@ func Run(host string, port int, storage *event.Storage) {
 				return eventapi.NewListBadRequest()
 			}
 			var events []*models.Event
-			storage.Range(func(id event.ID, event event.Event) {
+			storage.Range(func(id event.ID, event event.Event) bool {
 				if respDate.After(event.Date) && event.Date.Add(event.Duration).After(respDate) {
 					date := event.Date.Format("2006-01-02 15:04:05")
 					duration := int64(event.Duration.Seconds())
@@ -87,7 +89,7 @@ func Run(host string, port int, storage *event.Storage) {
 						Description: &event.Description,
 					})
 				}
-
+				return true
 			})
 			return eventapi.NewListOK().WithPayload(events)
 		})

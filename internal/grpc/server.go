@@ -5,10 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	// "net"
-	// "time"
-
-	// "google.golang.org/grpc"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/timestamp"
 
@@ -16,10 +12,10 @@ import (
 )
 
 type Server struct {
-	storage *event.Storage
+	storage event.Storage
 }
 
-func NewServer(storage *event.Storage) *Server {
+func NewServer(storage event.Storage) *Server {
 	return &Server{storage}
 }
 
@@ -59,11 +55,11 @@ func (server *Server) GetActive(_ context.Context, dateRequest *timestamp.Timest
 		return nil, err
 	}
 	events := &Events{}
-	server.storage.Range(func(id event.ID, event event.Event) {
+	server.storage.Range(func(id event.ID, event event.Event) (ok bool) {
 		if date.After(event.Date) && event.Date.Add(event.Duration).After(date) {
 			date, err := ptypes.TimestampProto(event.Date)
 			if err != nil {
-				return
+				return true
 			}
 			duration := ptypes.DurationProto(event.Duration)
 			events.Events = append(events.Events, &Event{
@@ -73,7 +69,7 @@ func (server *Server) GetActive(_ context.Context, dateRequest *timestamp.Timest
 				Description: event.Description,
 			})
 		}
-
+		return true
 	})
 	return events, nil
 }

@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 
-	"github.com/slonegd-otus-go/12_calendar/internal/event"
+	"github.com/slonegd-otus-go/12_calendar/internal/event/mapstorage"
 	proto "github.com/slonegd-otus-go/12_calendar/internal/grpc"
 )
 
@@ -30,7 +30,7 @@ var Command = &cobra.Command{
 			log.Fatalf("failed to listen %v", err)
 		}
 
-		storage := event.NewStorage()
+		storage := mapstorage.New()
 
 		grpcServer := grpc.NewServer()
 		proto.RegisterCalendarServer(grpcServer, proto.NewServer(storage))

@@ -1,4 +1,4 @@
-package event_test
+package mapstorage_test
 
 import (
 	"strings"
@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/slonegd-otus-go/12_calendar/internal/event"
+	"github.com/slonegd-otus-go/12_calendar/internal/event/mapstorage"
 )
 
 type Action int
@@ -95,7 +96,7 @@ func TestStorage(t *testing.T) {
 	for _, tt := range tests {
 		var wg sync.WaitGroup
 
-		storage := event.NewStorage()
+		storage := mapstorage.New()
 		for i, _ := range tt.actions {
 			if tt.actions[i].action == wait {
 				// time.Sleep(time.Second)
