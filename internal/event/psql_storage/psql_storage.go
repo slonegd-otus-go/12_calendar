@@ -52,7 +52,7 @@ func (storage *storage) Update(id event.ID, newEvent event.Event) (ok bool) {
 		SET description = :description, start_time = :start_time, duration = :duration
 		WHERE id = :id`
 	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
-	_, err := storage.db.NamedExecContext(ctx, query, map[string]interface{}{
+	result, err := storage.db.NamedExecContext(ctx, query, map[string]interface{}{
 		"description": newEvent.Description,
 		"start_time":  newEvent.Date,
 		"duration":    newEvent.Duration.String(),
@@ -60,6 +60,15 @@ func (storage *storage) Update(id event.ID, newEvent event.Event) (ok bool) {
 	})
 	if err != nil {
 		log.Printf("update event failed: %s", err)
+		return false
+	}
+	qty, err := result.RowsAffected()
+	if err != nil {
+		log.Printf("update event failed: %s", err)
+		return false
+	}
+	if qty != 1 {
+		log.Printf("update event failed: dont have event with id %d", id)
 		return false
 	}
 	log.Printf("update event %v with id %d", newEvent, id)
