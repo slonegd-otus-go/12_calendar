@@ -30,12 +30,12 @@ func (storage *storage) Add(newEvent event.Event) event.ID {
 		values(:description, :start_time, :duration)
 		returning id`
 	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
-	result, err := storage.db.PrepareNamedContext(ctx, query)
+	state, err := storage.db.PrepareNamedContext(ctx, query)
 	if err != nil {
 		log.Fatal(err)
 	}
 	var id int
-	err = result.Get(&id, map[string]interface{}{
+	err = state.Get(&id, map[string]interface{}{
 		"description": newEvent.Description,
 		"start_time":  newEvent.Date,
 		"duration":    newEvent.Duration.String(),
@@ -47,7 +47,22 @@ func (storage *storage) Add(newEvent event.Event) event.ID {
 	return event.ID(id)
 }
 
-func (storage *storage) Update(id event.ID, event event.Event) (ok bool) {
+func (storage *storage) Update(id event.ID, newEvent event.Event) (ok bool) {
+	query := `UPDATE events
+		SET description = :description, start_time = :start_time, duration = :duration
+		WHERE id = :id`
+	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	_, err := storage.db.NamedExecContext(ctx, query, map[string]interface{}{
+		"description": newEvent.Description,
+		"start_time":  newEvent.Date,
+		"duration":    newEvent.Duration.String(),
+		"id":          id,
+	})
+	if err != nil {
+		log.Printf("update event failed: %s", err)
+		return false
+	}
+	log.Printf("update event %v with id %d", newEvent, id)
 	return true
 }
 
