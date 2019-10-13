@@ -21,7 +21,7 @@ content-type: application/json
 
 ### Remove
 
-GET http://localhost:8080/events/remove/1 HTTP/1.1
+GET http://localhost:8080/events/remove/2 HTTP/1.1
 
 ### Update
 

@@ -76,6 +76,25 @@ func (storage *storage) Update(id event.ID, newEvent event.Event) (ok bool) {
 }
 
 func (storage *storage) Remove(id event.ID) (ok bool) {
+	query := `DELETE FROM events WHERE id = :id`
+	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	result, err := storage.db.NamedExecContext(ctx, query, map[string]interface{}{
+		"id": id,
+	})
+	if err != nil {
+		log.Printf("remove event failed: %s", err)
+		return false
+	}
+	qty, err := result.RowsAffected()
+	if err != nil {
+		log.Printf("remove event failed: %s", err)
+		return false
+	}
+	if qty != 1 {
+		log.Printf("remove event failed: dont have event with id %d", id)
+		return false
+	}
+	log.Printf("remove event with id %d", id)
 	return true
 }
 
