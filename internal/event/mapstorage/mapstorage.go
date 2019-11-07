@@ -46,11 +46,11 @@ func (storage *storage) Remove(id event.ID) (ok bool) {
 	return ok
 }
 
-func (storage *storage) Active(date time.Time) []event.Event {
-	var events []event.Event
-	storage.Range(func(_ event.ID, event event.Event) bool {
+func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
+	events := make(map[event.ID]event.Event)
+	storage.Range(func(id event.ID, event event.Event) bool {
 		if date.After(event.Date) && event.Date.Add(event.Duration).After(date) {
-			events = append(events, event)
+			events[id] = event
 		}
 		return true
 	})

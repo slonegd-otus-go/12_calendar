@@ -98,7 +98,7 @@ func (storage *storage) Remove(id event.ID) (ok bool) {
 	return true
 }
 
-func (storage *storage) Active(date time.Time) []event.Event {
+func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
 	return nil
 }
 
