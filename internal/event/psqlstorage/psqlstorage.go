@@ -107,7 +107,7 @@ func (storage *storage) Get(id event.ID) (result event.Event, ok bool) {
 		"id": id,
 	})
 	if err != nil {
-		log.Printf("remove event failed: %s", err)
+		log.Printf("%s, with id=%d failed: %s", query, id, err)
 		return result, false
 	}
 	defer rows.Close()
@@ -143,5 +143,42 @@ func parseDuration(s string) (time.Duration, error) {
 }
 
 func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
-	return nil
+	events := make(map[event.ID]event.Event)
+	query :=
+		`SELECT id, description, start_time, duration 
+		 FROM events
+		 WHERE :d BETWEEN start_time AND start_time + duration`
+	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	rows, err := storage.db.NamedQueryContext(ctx, query, map[string]interface{}{
+		"d": date,
+	})
+	if err != nil {
+		log.Printf("%s, with date=%s failed: %s", query, date, err)
+		return events
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		var description string
+		var start_time time.Time
+		var duration string
+		err := rows.Scan(&id, &description, &start_time, &duration)
+		if err != nil {
+			log.Printf("rows scan failed: %s", err)
+			continue
+		}
+		resultDuration, err := parseDuration(duration)
+		if err != nil {
+			log.Printf("parse duration failed: %s", err)
+			continue
+		}
+		events[event.ID(id)] = event.Event{
+			Description: description,
+			Date:        start_time,
+			Duration:    resultDuration,
+		}
+	}
+
+	return events
 }
