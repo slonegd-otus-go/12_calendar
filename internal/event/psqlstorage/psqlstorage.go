@@ -1,4 +1,4 @@
-package psql_storage
+package psqlstorage
 
 import (
 	"context"

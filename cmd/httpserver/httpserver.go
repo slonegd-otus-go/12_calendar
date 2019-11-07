@@ -7,7 +7,7 @@ import (
 
 	"github.com/slonegd-otus-go/12_calendar/internal/event"
 	"github.com/slonegd-otus-go/12_calendar/internal/event/mapstorage"
-	"github.com/slonegd-otus-go/12_calendar/internal/event/psql_storage"
+	"github.com/slonegd-otus-go/12_calendar/internal/event/psqlstorage"
 	"github.com/slonegd-otus-go/12_calendar/internal/web"
 )
 
@@ -24,7 +24,7 @@ var Command = &cobra.Command{
 		case "map":
 			storage = mapstorage.New()
 		case "psql":
-			storage = psql_storage.New()
+			storage = psqlstorage.New()
 		default:
 			log.Fatalf("unknow storage type, want map or psql, got %s", storageType)
 		}
