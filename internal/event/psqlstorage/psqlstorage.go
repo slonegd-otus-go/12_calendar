@@ -2,7 +2,9 @@ package psqlstorage
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"strings"
 	"time"
 
 	_ "github.com/jackc/pgx/v4/stdlib"
@@ -98,10 +100,48 @@ func (storage *storage) Remove(id event.ID) (ok bool) {
 	return true
 }
 
-func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
-	return nil
+func (storage *storage) Get(id event.ID) (result event.Event, ok bool) {
+	query := `SELECT description, start_time, duration FROM events WHERE id = :id`
+	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	rows, err := storage.db.NamedQueryContext(ctx, query, map[string]interface{}{
+		"id": id,
+	})
+	if err != nil {
+		log.Printf("remove event failed: %s", err)
+		return result, false
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var description string
+		var start_time time.Time
+		var duration string
+		err := rows.Scan(&description, &start_time, &duration)
+		if err != nil {
+			log.Printf("rows scan failed: %s", err)
+			return result, false
+		}
+		resultDuration, err := parseDuration(duration)
+		if err != nil {
+			log.Printf("parse duration failed: %s", err)
+			return result, false
+		}
+		return event.Event{
+			Description: description,
+			Date:        start_time,
+			Duration:    resultDuration,
+		}, true
+	}
+	return result, false
 }
 
-func (storage *storage) Get(id event.ID) (event event.Event, ok bool) {
-	return event, ok
+func parseDuration(s string) (time.Duration, error) {
+	s = strings.Replace(s, ":", "h", 1)
+	s = strings.Replace(s, ":", "m", 1)
+	s = fmt.Sprintf("%ss", s)
+	return time.ParseDuration(s)
+}
+
+func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
+	return nil
 }
