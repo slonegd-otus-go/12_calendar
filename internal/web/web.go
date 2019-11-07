@@ -77,20 +77,20 @@ func Run(host string, port int, storage event.Storage) {
 			if err != nil {
 				return eventapi.NewListBadRequest()
 			}
+
+			active := storage.Active(respDate)
+
 			var events []*models.Event
-			storage.Range(func(id event.ID, event event.Event) bool {
-				if respDate.After(event.Date) && event.Date.Add(event.Duration).After(respDate) {
-					date := event.Date.Format("2006-01-02 15:04:05")
-					duration := int64(event.Duration.Seconds())
-					events = append(events, &models.Event{
-						ID:          int64(id),
-						Date:        &date,
-						Duration:    &duration,
-						Description: &event.Description,
-					})
-				}
-				return true
-			})
+			for id, event := range active {
+				date := event.Date.Format("2006-01-02 15:04:05")
+				duration := int64(event.Duration.Seconds())
+				events = append(events, &models.Event{
+					ID:          int64(id),
+					Date:        &date,
+					Duration:    &duration,
+					Description: &event.Description,
+				})
+			}
 			return eventapi.NewListOK().WithPayload(events)
 		})
 
