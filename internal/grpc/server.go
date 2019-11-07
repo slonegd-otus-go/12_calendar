@@ -54,23 +54,24 @@ func (server *Server) GetActive(_ context.Context, dateRequest *timestamp.Timest
 	if err != nil {
 		return nil, err
 	}
+
+	active := server.storage.Active(date)
+
 	events := &Events{}
-	server.storage.Range(func(id event.ID, event event.Event) (ok bool) {
-		if date.After(event.Date) && event.Date.Add(event.Duration).After(date) {
-			date, err := ptypes.TimestampProto(event.Date)
-			if err != nil {
-				return true
-			}
-			duration := ptypes.DurationProto(event.Duration)
-			events.Events = append(events.Events, &Event{
-				Id:          int64(id),
-				Date:        date,
-				Duration:    duration,
-				Description: event.Description,
-			})
+	for id, event := range active {
+		duration := ptypes.DurationProto(event.Duration)
+		date, err := ptypes.TimestampProto(event.Date)
+		if err != nil {
+			return nil, fmt.Errorf("parse TimestampProto from time.Time failed: %s", err)
 		}
-		return true
-	})
+		events.Events = append(events.Events, &Event{
+			Id:          int64(id),
+			Date:        date,
+			Duration:    duration,
+			Description: event.Description,
+		})
+	}
+
 	return events, nil
 }
 
@@ -85,7 +86,7 @@ func (server *Server) Get(_ context.Context, id *ID) (*GetResponse, error) {
 
 	date, err := ptypes.TimestampProto(event.Date)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("parse TimestampProto from time.Time failed: %s", err)
 	}
 	duration := ptypes.DurationProto(event.Duration)
 
