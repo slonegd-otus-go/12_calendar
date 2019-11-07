@@ -98,6 +98,10 @@ func (storage *storage) Remove(id event.ID) (ok bool) {
 	return true
 }
 
+func (storage *storage) Active(date time.Time) []event.Event {
+	return nil
+}
+
 func (storage *storage) Range(f func(id event.ID, event event.Event) (ok bool)) {
 
 }

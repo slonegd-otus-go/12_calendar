@@ -3,6 +3,7 @@ package mapstorage
 import (
 	"fmt"
 	"sync"
+	"time"
 
 	"github.com/slonegd-otus-go/12_calendar/internal/event"
 )
@@ -43,6 +44,17 @@ func (storage *storage) Remove(id event.ID) (ok bool) {
 	delete(storage.events, id)
 	storage.mtx.Unlock()
 	return ok
+}
+
+func (storage *storage) Active(date time.Time) []event.Event {
+	var events []event.Event
+	storage.Range(func(_ event.ID, event event.Event) bool {
+		if date.After(event.Date) && event.Date.Add(event.Duration).After(date) {
+			events = append(events, event)
+		}
+		return true
+	})
+	return events
 }
 
 func (storage *storage) Range(f func(id event.ID, event event.Event) (ok bool)) {

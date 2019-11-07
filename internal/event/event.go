@@ -16,6 +16,7 @@ type Storage interface {
 	Add(Event) ID
 	Update(ID, Event) (ok bool)
 	Remove(ID) (ok bool)
+	Active(time.Time) []Event
 	Range(f func(ID, Event) (ok bool))
 	Get(ID) (event Event, ok bool)
 }
