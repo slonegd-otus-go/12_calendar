@@ -48,23 +48,13 @@ func (storage *storage) Remove(id event.ID) (ok bool) {
 
 func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
 	events := make(map[event.ID]event.Event)
-	storage.Range(func(id event.ID, event event.Event) bool {
+	storage.rangeEvents(func(id event.ID, event event.Event) bool {
 		if date.After(event.Date) && event.Date.Add(event.Duration).After(date) {
 			events[id] = event
 		}
 		return true
 	})
 	return events
-}
-
-func (storage *storage) Range(f func(id event.ID, event event.Event) (ok bool)) {
-	storage.mtx.Lock()
-	for id, event := range storage.events {
-		if !f(id, event) {
-			break
-		}
-	}
-	storage.mtx.Unlock()
 }
 
 func (storage *storage) Get(id event.ID) (event event.Event, ok bool) {
@@ -82,4 +72,14 @@ func (storage *storage) Strings() []string {
 	}
 	storage.mtx.RUnlock()
 	return result
+}
+
+func (storage *storage) rangeEvents(f func(id event.ID, event event.Event) (ok bool)) {
+	storage.mtx.Lock()
+	for id, event := range storage.events {
+		if !f(id, event) {
+			break
+		}
+	}
+	storage.mtx.Unlock()
 }

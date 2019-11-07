@@ -50,15 +50,8 @@ func Run(host string, port int, storage event.Storage) {
 
 	api.EventGetHandler = eventapi.GetHandlerFunc(
 		func(params eventapi.GetParams) middleware.Responder {
-			var resultEvent *event.Event
-			storage.Range(func(id event.ID, event event.Event) bool {
-				if int64(id) == params.EventID {
-					resultEvent = &event
-					return false
-				}
-				return true
-			})
-			if resultEvent == nil {
+			resultEvent, ok := storage.Get(event.ID(params.EventID))
+			if !ok {
 				return eventapi.NewGetNotFound()
 			}
 			date := resultEvent.Date.Format("2006-01-02 15:04:05")

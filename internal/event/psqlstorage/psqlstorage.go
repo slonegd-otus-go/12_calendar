@@ -102,10 +102,6 @@ func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
 	return nil
 }
 
-func (storage *storage) Range(f func(id event.ID, event event.Event) (ok bool)) {
-
-}
-
 func (storage *storage) Get(id event.ID) (event event.Event, ok bool) {
 	return event, ok
 }
