@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/slonegd-otus-go/12_calendar/internal/event"
+	"github.com/slonegd-otus-go/12_calendar/internal/event/amqppublisher"
 	"github.com/slonegd-otus-go/12_calendar/internal/event/mapstorage"
 	"github.com/slonegd-otus-go/12_calendar/internal/event/psqlstorage"
 	"github.com/slonegd-otus-go/12_calendar/internal/web"
@@ -14,6 +15,14 @@ import (
 var host string
 var port int
 var storageType string
+var ampqURL string
+
+func init() {
+	Command.Flags().StringVar(&host, "host", "localhost", "host to listen")
+	Command.Flags().IntVar(&port, "port", 8080, "port to listen")
+	Command.Flags().StringVar(&storageType, "storage", "map", "storage type (map or psql)")
+	Command.Flags().StringVar(&ampqURL, "ampqurl", "amqp://guest:guest@localhost:5672/", "url to ampq server")
+}
 
 var Command = &cobra.Command{
 	Use:   "httpserver",
@@ -28,21 +37,8 @@ var Command = &cobra.Command{
 		default:
 			log.Fatalf("unknow storage type, want map or psql, got %s", storageType)
 		}
-		publisher := Publisher{}
-		event.StartScan(storage, publisher.onEvent)
+		publisher := amqppublisher.New(ampqURL)
+		event.StartScan(storage, publisher.OnEvent)
 		web.Run(host, port, storage)
 	},
-}
-
-func init() {
-	Command.Flags().StringVar(&host, "host", "localhost", "host to listen")
-	Command.Flags().IntVar(&port, "port", 8080, "port to listen")
-	Command.Flags().StringVar(&storageType, "storage", "map", "storage type (map or psql)")
-}
-
-// placeholder
-type Publisher struct{}
-
-func (publisher Publisher) onEvent(event event.Event) {
-	log.Printf("publish event: %v", event)
 }

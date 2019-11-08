@@ -26,6 +26,7 @@ require (
 	github.com/rogpeppe/go-internal v1.3.2 // indirect
 	github.com/slonegd-otus-go/swaggertest v0.0.0-20190907132150-2240c0e9c2df // indirect
 	github.com/spf13/cobra v0.0.5
+	github.com/streadway/amqp v0.0.0-20190827072141-edfb9018d271
 	github.com/stretchr/testify v1.4.0
 	go.opencensus.io v0.22.1 // indirect
 	golang.org/x/exp v0.0.0-20190912063710-ac5d2bfcbfe0 // indirect
