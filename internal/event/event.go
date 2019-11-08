@@ -19,3 +19,15 @@ type Storage interface {
 	Active(time.Time) map[ID]Event
 	Get(ID) (event Event, ok bool)
 }
+
+func StartScan(storage Storage, onEvent func(Event)) {
+	go scan(storage, onEvent)
+}
+
+func scan(storage Storage, onEvent func(Event)) {
+	ticker := time.NewTicker(1 * time.Second)
+	for range ticker.C {
+		event := Event{} // TODO определить Event
+		onEvent(event)
+	}
+}

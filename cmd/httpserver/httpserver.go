@@ -28,6 +28,8 @@ var Command = &cobra.Command{
 		default:
 			log.Fatalf("unknow storage type, want map or psql, got %s", storageType)
 		}
+		publisher := Publisher{}
+		event.StartScan(storage, publisher.onEvent)
 		web.Run(host, port, storage)
 	},
 }
@@ -36,4 +38,11 @@ func init() {
 	Command.Flags().StringVar(&host, "host", "localhost", "host to listen")
 	Command.Flags().IntVar(&port, "port", 8080, "port to listen")
 	Command.Flags().StringVar(&storageType, "storage", "map", "storage type (map or psql)")
+}
+
+// placeholder
+type Publisher struct{}
+
+func (publisher Publisher) onEvent(event event.Event) {
+	log.Printf("publish event: %v", event)
 }
