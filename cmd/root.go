@@ -6,6 +6,7 @@ import (
 	"github.com/slonegd-otus-go/12_calendar/cmd/api"
 	"github.com/slonegd-otus-go/12_calendar/cmd/grpcclient"
 	"github.com/slonegd-otus-go/12_calendar/cmd/scheduler"
+	"github.com/slonegd-otus-go/12_calendar/cmd/sender"
 )
 
 var Command = &cobra.Command{
@@ -16,6 +17,7 @@ var Command = &cobra.Command{
 func init() {
 	Command.AddCommand(api.Command)
 	Command.AddCommand(scheduler.Command)
+	Command.AddCommand(sender.Command)
 
 	// for debug
 	Command.AddCommand(grpcclient.Command)
