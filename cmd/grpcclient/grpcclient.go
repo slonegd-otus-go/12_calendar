@@ -24,7 +24,7 @@ var id int
 
 func init() {
 	Command.Flags().StringVar(&host, "host", "localhost", "host to connect")
-	Command.Flags().IntVar(&port, "port", 50051, "port to connect")
+	Command.Flags().IntVar(&port, "port", 8080, "port to connect")
 	Command.Flags().StringVar(&command, "command", "", "command to server create/remove/getlist (required)")
 	Command.Flags().StringVar(&date, "date", "2019-09-07 08:20:00", "event start date")
 	Command.Flags().IntVar(&duration, "duration", 600, "event duration in seconds")

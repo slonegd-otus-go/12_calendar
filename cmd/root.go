@@ -6,6 +6,7 @@ import (
 	"github.com/slonegd-otus-go/12_calendar/cmd/grpcclient"
 	"github.com/slonegd-otus-go/12_calendar/cmd/grpcserver"
 	"github.com/slonegd-otus-go/12_calendar/cmd/httpserver"
+	"github.com/slonegd-otus-go/12_calendar/cmd/api"
 )
 
 var Command = &cobra.Command{
@@ -17,4 +18,6 @@ func init() {
 	Command.AddCommand(httpserver.Command)
 	Command.AddCommand(grpcserver.Command)
 	Command.AddCommand(grpcclient.Command)
+
+	Command.AddCommand(api.Command)
 }
