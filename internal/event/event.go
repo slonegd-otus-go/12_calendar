@@ -21,10 +21,10 @@ type Storage interface {
 }
 
 func StartScan(storage Storage, onEvent func(Event)) {
-	go scan(storage, onEvent)
+	go Scan(storage, onEvent)
 }
 
-func scan(storage Storage, onEvent func(Event)) {
+func Scan(storage Storage, onEvent func(Event)) {
 	ticker := time.NewTicker(1 * time.Second)
 	publishedIDs := make(IDset)
 	for range ticker.C {
