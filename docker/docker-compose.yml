@@ -36,3 +36,13 @@ services:
       - psql
       - rabbitmq
     restart: always
+
+  sender:
+    build:
+      context: ../.
+      dockerfile: ./docker/sender/Dockerfile
+    image: calendar_sender
+    command: --amqpurl=amqp://rabbitmq?connection_attempts=5&retry_delay=5
+    depends_on: 
+      - rabbitmq
+    restart: always
