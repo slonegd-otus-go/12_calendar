@@ -12,8 +12,8 @@ type Publisher struct {
 	url string
 }
 
-func New(address string) *Publisher {
-	return &Publisher{address}
+func New(url string) *Publisher {
+	return &Publisher{url}
 }
 
 func (publisher Publisher) OnEvent(event event.Event) {

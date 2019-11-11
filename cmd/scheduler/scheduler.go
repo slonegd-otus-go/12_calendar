@@ -10,11 +10,11 @@ import (
 	"github.com/slonegd-otus-go/12_calendar/internal/event/psqlstorage"
 )
 
-var ampqURL string
+var amqpURL string
 var connection string
 
 func init() {
-	Command.Flags().StringVar(&ampqURL, "ampqurl", "amqp://guest:guest@localhost:5672", "url to ampq server")
+	Command.Flags().StringVar(&amqpURL, "amqpurl", "amqp://guest:guest@localhost:5672", "url to ampq server")
 	Command.Flags().StringVar(&connection, "connection", "host=localhost user=myuser password=mypass dbname=mydb", "connection string for postgresql")
 }
 
@@ -23,8 +23,8 @@ var Command = &cobra.Command{
 	Short: "Run event scheduler (amqp publisher)",
 	Run: func(cmd *cobra.Command, args []string) {
 		storage := psqlstorage.New(connection)
-		publisher := amqppublisher.New(ampqURL)
-		log.Printf("start event ampq publisher on %s", ampqURL)
+		publisher := amqppublisher.New(amqpURL)
+		log.Printf("start event ampq publisher on %s", amqpURL)
 		event.Scan(storage, publisher.OnEvent)
 	},
 }
