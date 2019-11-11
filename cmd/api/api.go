@@ -19,12 +19,14 @@ var host string
 var port int
 var isGRPC bool
 var storageType string
+var connection string
 
 func init() {
-	Command.Flags().StringVar(&host, "host", "localhost", "host to listen")
+	Command.Flags().StringVar(&host, "host", "127.0.0.1", "host to listen")
 	Command.Flags().IntVar(&port, "port", 8080, "port to listen")
 	Command.Flags().BoolVar(&isGRPC, "grpc", false, "set for grpc api instead rest api")
 	Command.Flags().StringVar(&storageType, "storage", "psql", "storage type (map or psql)")
+	Command.Flags().StringVar(&connection, "connection", "host=localhost user=myuser password=mypass dbname=mydb", "connection string for postgresql")
 }
 
 var Command = &cobra.Command{
@@ -37,7 +39,7 @@ var Command = &cobra.Command{
 		case "map":
 			storage = mapstorage.New()
 		case "psql":
-			storage = psqlstorage.New()
+			storage = psqlstorage.New(connection)
 		default:
 			log.Fatalf("unknow storage type, want map or psql, got %s", storageType)
 		}

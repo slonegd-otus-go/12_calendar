@@ -19,8 +19,8 @@ type storage struct {
 	db *sqlx.DB
 }
 
-func New() *storage {
-	db, err := sqlx.Open("pgx", "host=localhost user=myuser password=mypass dbname=mydb")
+func New(connection string) *storage {
+	db, err := sqlx.Open("pgx", connection)
 	if err != nil {
 		log.Fatal(err)
 	}

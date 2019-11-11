@@ -1,0 +1,19 @@
+version: '2.0'
+services:
+  api:
+    build:
+      context: ../.
+      dockerfile: ./docker/api/Dockerfile
+    image: mycalendar
+    command: --connection="host=db user=myuser password=mypass dbname=mydb"
+    restart: always
+    ports:
+      - 8080:8080
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypass
+      POSTGRES_DB: mydb
+    volumes:
+      - ../sql/001_event_table.sql:/docker-entrypoint-initdb.d/001_event_table.sql
