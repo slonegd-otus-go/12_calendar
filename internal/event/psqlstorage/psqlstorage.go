@@ -31,10 +31,12 @@ func (storage *storage) Add(newEvent event.Event) event.ID {
 	query := `insert into events(description, start_time, duration)
 		values(:description, :start_time, :duration)
 		returning id`
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
 	state, err := storage.db.PrepareNamedContext(ctx, query)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("prepare named context failed: %s", err)
+		return 0
 	}
 	var id int
 	err = state.Get(&id, map[string]interface{}{
@@ -43,7 +45,8 @@ func (storage *storage) Add(newEvent event.Event) event.ID {
 		"duration":    newEvent.Duration.String(),
 	})
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("get statement failed: %s", err)
+		return 0
 	}
 	log.Printf("add event %v done with id %d", newEvent, id)
 	return event.ID(id)
@@ -53,7 +56,8 @@ func (storage *storage) Update(id event.ID, newEvent event.Event) (ok bool) {
 	query := `UPDATE events
 		SET description = :description, start_time = :start_time, duration = :duration
 		WHERE id = :id`
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
 	result, err := storage.db.NamedExecContext(ctx, query, map[string]interface{}{
 		"description": newEvent.Description,
 		"start_time":  newEvent.Date,
@@ -79,7 +83,8 @@ func (storage *storage) Update(id event.ID, newEvent event.Event) (ok bool) {
 
 func (storage *storage) Remove(id event.ID) (ok bool) {
 	query := `DELETE FROM events WHERE id = :id`
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
 	result, err := storage.db.NamedExecContext(ctx, query, map[string]interface{}{
 		"id": id,
 	})
@@ -102,7 +107,8 @@ func (storage *storage) Remove(id event.ID) (ok bool) {
 
 func (storage *storage) Get(id event.ID) (result event.Event, ok bool) {
 	query := `SELECT description, start_time, duration FROM events WHERE id = :id`
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
 	rows, err := storage.db.NamedQueryContext(ctx, query, map[string]interface{}{
 		"id": id,
 	})
@@ -114,9 +120,9 @@ func (storage *storage) Get(id event.ID) (result event.Event, ok bool) {
 
 	for rows.Next() {
 		var description string
-		var start_time time.Time
+		var date time.Time
 		var duration string
-		err := rows.Scan(&description, &start_time, &duration)
+		err := rows.Scan(&description, &date, &duration)
 		if err != nil {
 			log.Printf("rows scan failed: %s", err)
 			return result, false
@@ -128,7 +134,7 @@ func (storage *storage) Get(id event.ID) (result event.Event, ok bool) {
 		}
 		return event.Event{
 			Description: description,
-			Date:        start_time,
+			Date:        date,
 			Duration:    resultDuration,
 		}, true
 	}
@@ -148,7 +154,8 @@ func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
 		`SELECT id, description, start_time, duration 
 		 FROM events
 		 WHERE :d BETWEEN start_time AND start_time + duration`
-	ctx, _ := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
 	rows, err := storage.db.NamedQueryContext(ctx, query, map[string]interface{}{
 		"d": date,
 	})
