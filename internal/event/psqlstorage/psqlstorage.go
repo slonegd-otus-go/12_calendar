@@ -161,9 +161,9 @@ func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
 	for rows.Next() {
 		var id int
 		var description string
-		var start_time time.Time
+		var date time.Time
 		var duration string
-		err := rows.Scan(&id, &description, &start_time, &duration)
+		err := rows.Scan(&id, &description, &date, &duration)
 		if err != nil {
 			log.Printf("rows scan failed: %s", err)
 			continue
@@ -175,7 +175,7 @@ func (storage *storage) Active(date time.Time) map[event.ID]event.Event {
 		}
 		events[event.ID(id)] = event.Event{
 			Description: description,
-			Date:        start_time,
+			Date:        date,
 			Duration:    resultDuration,
 		}
 	}
