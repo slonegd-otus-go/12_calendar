@@ -77,11 +77,12 @@ func Run(host string, port int, storage event.Storage) {
 			for id, event := range active {
 				date := event.Date.Format("2006-01-02 15:04:05")
 				duration := int64(event.Duration.Seconds())
+				description := event.Description
 				events = append(events, &models.Event{
 					ID:          int64(id),
 					Date:        &date,
 					Duration:    &duration,
-					Description: &event.Description,
+					Description: &description,
 				})
 			}
 			return eventapi.NewListOK().WithPayload(events)

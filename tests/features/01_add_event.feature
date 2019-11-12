@@ -9,6 +9,10 @@ Feature: Add event
         date=2019-11-09%208:57:06
         """
 		Then The response code should be 200
+        And I receive events with data
+        """
+        []
+		"""
 
     Scenario: Add first event
 		When I send "POST" request to "http://localhost:8080/events" with data 
@@ -21,7 +25,7 @@ Feature: Add event
 		"""
 		Then The response code should be 200
         And I receive event with data
-         """
+        """
         {
             "date":"2019-11-11 13:11:05",
             "duration":5,
@@ -41,7 +45,7 @@ Feature: Add event
 		"""
 		Then The response code should be 200
         And I receive event with data
-         """
+        """
         {
             "date":"2019-11-11 13:11:05",
             "duration":5,

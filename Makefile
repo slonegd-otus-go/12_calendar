@@ -10,7 +10,7 @@ build:
 	go build -o mycalendar main.go
 
 godog:
-	docker-compose -f ./docker/docker-compose.yml up  -d ;\
+	docker-compose -f ./docker/docker-compose.yml up -d ;\
 	echo Wait 5s for service availability... ;\
 	sleep 5 ;\
 	cd tests && godog; \

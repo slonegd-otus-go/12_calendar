@@ -10,11 +10,19 @@ import (
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
+	"github.com/stretchr/testify/assert"
 )
+
+// for use testify
+type t struct{}
+
+func (t t) Errorf(format string, args ...interface{}) {}
+func (t t) FailNow()                                  {}
 
 type addEventTest struct {
 	responseStatusCode int
 	event              []byte
+	t                  t
 }
 
 func (test *addEventTest) iSendRequestToWithData(method, addr string, data *gherkin.DocString) error {
@@ -26,6 +34,11 @@ func (test *addEventTest) iSendRequestToWithData(method, addr string, data *gher
 			return fmt.Errorf("GET method failed: %s", err)
 		}
 		test.responseStatusCode = response.StatusCode
+		bytes, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			return fmt.Errorf("read body failed: %s", err)
+		}
+		test.event = bytes
 		return nil
 
 	case http.MethodPost:
@@ -54,10 +67,27 @@ func (test *addEventTest) theResponseCodeShouldBe(code int) error {
 	return nil
 }
 
-func (test *addEventTest) iReceiveEventWithData(event *gherkin.DocString) error {
+func (test *addEventTest) iReceiveEventsWithData(body *gherkin.DocString) error {
+	var expected, actual []interface{}
+
+	if err := json.Unmarshal([]byte(body.Content), &expected); err != nil {
+		return fmt.Errorf("unmarshal actual event failed: %s", err)
+	}
+
+	if err := json.Unmarshal(test.event, &actual); err != nil {
+		return fmt.Errorf("unmarshal expected event failed: %s", err)
+	}
+
+	if ok := assert.ElementsMatch(test.t, expected, actual); !ok {
+		return fmt.Errorf("expected JSON does not match actual, %v != %v", expected, actual)
+	}
+	return nil
+}
+
+func (test *addEventTest) iReceiveEventWithData(body *gherkin.DocString) error {
 	var expected, actual interface{}
 
-	if err := json.Unmarshal([]byte(event.Content), &expected); err != nil {
+	if err := json.Unmarshal([]byte(body.Content), &expected); err != nil {
 		return fmt.Errorf("unmarshal actual event failed: %s", err)
 	}
 
@@ -77,4 +107,5 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^I send "([^"]*)" request to "([^"]*)" with data$`, test.iSendRequestToWithData)
 	s.Step(`^The response code should be (\d+)$`, test.theResponseCodeShouldBe)
 	s.Step(`^I receive event with data$`, test.iReceiveEventWithData)
+	s.Step(`^I receive events with data$`, test.iReceiveEventsWithData)
 }

@@ -2,11 +2,11 @@
 
 ### Get Active by date
 
-GET http://localhost:8080/events/?date=2019-11-09 08:57:06 HTTP/1.1
+GET http://localhost:8080/events/?date=2019-11-11 13:11:06 HTTP/1.1
 
 ### Get by ID
 
-GET http://localhost:8080/events/1 HTTP/1.1
+GET http://localhost:8080/events/19 HTTP/1.1
 
 ### Create
 
@@ -25,11 +25,11 @@ GET http://localhost:8080/events/remove/2 HTTP/1.1
 
 ### Update
 
-POST http://localhost:8080/events/update/1 HTTP/1.1
+POST http://localhost:8080/events/update/17 HTTP/1.1
 content-type: application/json
 
 {
-    "Date":"2006-01-02 15:04:11",
+    "Date":"2019-11-11 13:11:05",
     "Duration":5,
-    "Description":"сдать домашку"
+    "Description":"сдать домашку3"
 }
