@@ -2,6 +2,7 @@ module github.com/slonegd-otus-go/12_calendar
 
 require (
 	cloud.google.com/go v0.46.2 // indirect
+	github.com/DATA-DOG/godog v0.7.13
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f // indirect
 	github.com/go-openapi/errors v0.19.2
 	github.com/go-openapi/loads v0.19.2
