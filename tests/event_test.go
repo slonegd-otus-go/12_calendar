@@ -10,6 +10,7 @@ import (
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
+	"github.com/slonegd-otus-go/12_calendar/internal/event/amqpsubscriber"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,7 +23,16 @@ func (t t) FailNow()                                  {}
 type eventTest struct {
 	responseStatusCode int
 	event              []byte
+	message            string
 	t                  t
+}
+
+func NewEventTest() *eventTest {
+	eventTest := &eventTest{}
+	go amqpsubscriber.Run("amqp://guest:guest@localhost:5672", func(message string) {
+		eventTest.message = message
+	})
+	return eventTest
 }
 
 func (test *eventTest) iSendRequestToWithData(method, addr string, data *gherkin.DocString) error {
@@ -102,7 +112,7 @@ func (test *eventTest) iReceiveEventWithData(body *gherkin.DocString) error {
 }
 
 func FeatureContext(s *godog.Suite) {
-	test := eventTest{}
+	test := NewEventTest()
 
 	s.Step(`^I send "([^"]*)" request to "([^"]*)" with data$`, test.iSendRequestToWithData)
 	s.Step(`^The response code should be (\d+)$`, test.theResponseCodeShouldBe)
