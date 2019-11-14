@@ -111,6 +111,22 @@ func (test *eventTest) iReceiveEventWithData(body *gherkin.DocString) error {
 	return nil
 }
 
+func (test *eventTest) iSendRequestToWithNowPlusSecondsDateAndDescription(arg1, arg2 string, arg3 int, arg4 string) error {
+	return godog.ErrPending
+}
+
+func (test *eventTest) iReceiveMessage(arg1 string) error {
+	return godog.ErrPending
+}
+
+func (test *eventTest) iWaitSeconds(arg1 int) error {
+	return godog.ErrPending
+}
+
+func (test *eventTest) iGotMessage(arg1 string) error {
+	return godog.ErrPending
+}
+
 func FeatureContext(s *godog.Suite) {
 	test := NewEventTest()
 
@@ -118,4 +134,9 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^The response code should be (\d+)$`, test.theResponseCodeShouldBe)
 	s.Step(`^I receive event with data$`, test.iReceiveEventWithData)
 	s.Step(`^I receive events with data$`, test.iReceiveEventsWithData)
+
+	s.Step(`^I send "([^"]*)" request to "([^"]*)" with now plus (\d+) seconds date and description "([^"]*)"$`, test.iSendRequestToWithNowPlusSecondsDateAndDescription)
+	s.Step(`^I receive message "([^"]*)"$`, test.iReceiveMessage)
+	s.Step(`^I wait (\d+) seconds$`, test.iWaitSeconds)
+	s.Step(`^I got message "([^"]*)"$`, test.iGotMessage)
 }
