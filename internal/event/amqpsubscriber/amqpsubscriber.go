@@ -6,7 +6,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func Run(url string) {
+func Run(url string, onEvent func(string)) {
 	log.Printf("start event subscriber on %s", url)
 	conn, err := amqp.Dial(url)
 	if err != nil {
@@ -50,7 +50,6 @@ func Run(url string) {
 	}
 
 	for message := range delivery {
-		log.Printf("got event: %s", message.Body)
+		onEvent(string(message.Body))
 	}
-
 }

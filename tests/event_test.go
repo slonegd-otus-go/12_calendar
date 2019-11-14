@@ -19,13 +19,13 @@ type t struct{}
 func (t t) Errorf(format string, args ...interface{}) {}
 func (t t) FailNow()                                  {}
 
-type addEventTest struct {
+type eventTest struct {
 	responseStatusCode int
 	event              []byte
 	t                  t
 }
 
-func (test *addEventTest) iSendRequestToWithData(method, addr string, data *gherkin.DocString) error {
+func (test *eventTest) iSendRequestToWithData(method, addr string, data *gherkin.DocString) error {
 	switch method {
 	case http.MethodGet:
 		request := addr + "?" + data.Content
@@ -60,14 +60,14 @@ func (test *addEventTest) iSendRequestToWithData(method, addr string, data *gher
 
 }
 
-func (test *addEventTest) theResponseCodeShouldBe(code int) error {
+func (test *eventTest) theResponseCodeShouldBe(code int) error {
 	if test.responseStatusCode != code {
 		return fmt.Errorf("unexpected status code: %d != %d", test.responseStatusCode, code)
 	}
 	return nil
 }
 
-func (test *addEventTest) iReceiveEventsWithData(body *gherkin.DocString) error {
+func (test *eventTest) iReceiveEventsWithData(body *gherkin.DocString) error {
 	var expected, actual []interface{}
 
 	if err := json.Unmarshal([]byte(body.Content), &expected); err != nil {
@@ -84,7 +84,7 @@ func (test *addEventTest) iReceiveEventsWithData(body *gherkin.DocString) error 
 	return nil
 }
 
-func (test *addEventTest) iReceiveEventWithData(body *gherkin.DocString) error {
+func (test *eventTest) iReceiveEventWithData(body *gherkin.DocString) error {
 	var expected, actual interface{}
 
 	if err := json.Unmarshal([]byte(body.Content), &expected); err != nil {
@@ -102,7 +102,7 @@ func (test *addEventTest) iReceiveEventWithData(body *gherkin.DocString) error {
 }
 
 func FeatureContext(s *godog.Suite) {
-	test := addEventTest{}
+	test := eventTest{}
 
 	s.Step(`^I send "([^"]*)" request to "([^"]*)" with data$`, test.iSendRequestToWithData)
 	s.Step(`^The response code should be (\d+)$`, test.theResponseCodeShouldBe)
