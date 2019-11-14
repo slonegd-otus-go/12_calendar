@@ -25,7 +25,7 @@ GET http://localhost:8080/events/remove/2 HTTP/1.1
 
 ### Update
 
-POST http://localhost:8080/events/update/17 HTTP/1.1
+POST http://localhost:8080/events/update/2 HTTP/1.1
 content-type: application/json
 
 {

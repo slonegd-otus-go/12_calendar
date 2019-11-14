@@ -9,14 +9,17 @@ services:
       POSTGRES_PASSWORD: mypass
       POSTGRES_DB: mydb
     volumes:
-      - ../sql/001_event_table.sql:/docker-entrypoint-initdb.d/001_event_table.sql
+      - ./sql/001_event_table.sql:/docker-entrypoint-initdb.d/001_event_table.sql
 
   rabbitmq:
     image: 'rabbitmq:3.8'
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 
   api:
     build:
-      context: ../.
+      context: .
       dockerfile: ./docker/api/Dockerfile
     image: calendar_api
     command: --connection="host=psql user=myuser password=mypass dbname=mydb"
@@ -28,7 +31,7 @@ services:
 
   scheduler:
     build:
-      context: ../.
+      context: .
       dockerfile: ./docker/scheduler/Dockerfile
     image: calendar_scheduler
     command: --connection="host=psql user=myuser password=mypass dbname=mydb" --amqpurl=amqp://rabbitmq?connection_attempts=5&retry_delay=5
@@ -39,7 +42,7 @@ services:
 
   sender:
     build:
-      context: ../.
+      context: .
       dockerfile: ./docker/sender/Dockerfile
     image: calendar_sender
     command: --amqpurl=amqp://rabbitmq?connection_attempts=5&retry_delay=5
