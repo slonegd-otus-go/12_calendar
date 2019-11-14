@@ -23,7 +23,7 @@ var Command = &cobra.Command{
 	Short: "Run event scheduler (amqp publisher)",
 	Run: func(cmd *cobra.Command, args []string) {
 		storage := psqlstorage.New(connection)
-		publisher := amqppublisher.New(amqpURL)
+		publisher := amqppublisher.New(amqpURL, "event")
 		log.Printf("start event ampq publisher on %s", amqpURL)
 		event.Scan(storage, publisher.OnEvent)
 	},

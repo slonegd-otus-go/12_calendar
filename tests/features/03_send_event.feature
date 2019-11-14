@@ -10,16 +10,6 @@ Feature: Recieve event
         When I wait 1 seconds
         Then I receive message ""
         When I wait 4 seconds
-        Then I receive message ""
-        When I wait 1 seconds
-        Then I receive message ""
-        When I wait 1 seconds
-        Then I receive message ""
-        When I wait 1 seconds
-        Then I receive message ""
-        When I wait 1 seconds
-        Then I receive message ""
-        When I wait 1 seconds
         Then I receive message "сдать домашку"
         When I wait 1 seconds
         Then I receive message ""

@@ -4,19 +4,18 @@ import (
 	"log"
 
 	"github.com/streadway/amqp"
-
-	"github.com/slonegd-otus-go/12_calendar/internal/event"
 )
 
 type Publisher struct {
-	url string
+	url  string
+	name string
 }
 
-func New(url string) *Publisher {
-	return &Publisher{url}
+func New(url, name string) *Publisher {
+	return &Publisher{url, name}
 }
 
-func (publisher Publisher) OnEvent(event event.Event) {
+func (publisher Publisher) OnEvent(event string) {
 	log.Printf("start publish event: %v", event)
 	conn, err := amqp.Dial(publisher.url)
 	if err != nil {
@@ -33,12 +32,12 @@ func (publisher Publisher) OnEvent(event event.Event) {
 	defer channel.Close()
 
 	queue, err := channel.QueueDeclare(
-		"event", // name
-		false,   // durable
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
+		publisher.name, // name
+		false,          // durable
+		false,          // delete when unused
+		false,          // exclusive
+		false,          // no-wait
+		nil,            // arguments
 	)
 	if err != nil {
 		log.Printf("declare queue failed: %s", err)
@@ -52,7 +51,7 @@ func (publisher Publisher) OnEvent(event event.Event) {
 		false,      // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
-			Body:        []byte(event.Description),
+			Body:        []byte(event),
 		},
 	)
 	if err != nil {

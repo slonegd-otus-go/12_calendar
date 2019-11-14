@@ -20,11 +20,11 @@ type Storage interface {
 	Get(ID) (event Event, ok bool)
 }
 
-func StartScan(storage Storage, onEvent func(Event)) {
+func StartScan(storage Storage, onEvent func(string)) {
 	go Scan(storage, onEvent)
 }
 
-func Scan(storage Storage, onEvent func(Event)) {
+func Scan(storage Storage, onEvent func(string)) {
 	ticker := time.NewTicker(1 * time.Second)
 	publishedIDs := make(IDset)
 	for range ticker.C {
@@ -35,7 +35,7 @@ func Scan(storage Storage, onEvent func(Event)) {
 			if publishedIDs.contains(id) {
 				continue
 			}
-			onEvent(event)
+			onEvent(event.Description)
 			publishedIDs.add(id)
 		}
 	}
