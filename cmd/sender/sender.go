@@ -18,7 +18,7 @@ var Command = &cobra.Command{
 	Use:   "sender",
 	Short: "Run event sender (amqp subscriber)",
 	Run: func(cmd *cobra.Command, args []string) {
-		amqpsubscriber.Run(amqpURL, func(message string) {
+		amqpsubscriber.Run(amqpURL, "event", func(message string) {
 			log.Printf("got event: %s", message)
 		})
 	},

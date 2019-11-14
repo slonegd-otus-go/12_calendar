@@ -6,7 +6,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func Run(url string, onEvent func(string)) {
+func Run(url, name string, onEvent func(string)) {
 	log.Printf("start event subscriber on %s", url)
 	conn, err := amqp.Dial(url)
 	if err != nil {
@@ -23,12 +23,12 @@ func Run(url string, onEvent func(string)) {
 	defer channel.Close()
 
 	queue, err := channel.QueueDeclare(
-		"event", // name
-		false,   // durable
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
+		name,  // name
+		false, // durable
+		false, // delete when unused
+		false, // exclusive
+		false, // no-wait
+		nil,   // arguments
 	)
 	if err != nil {
 		log.Printf("declare queue failed: %s", err)

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/gherkin"
@@ -29,16 +30,20 @@ type eventTest struct {
 
 func NewEventTest() *eventTest {
 	eventTest := &eventTest{}
-	go amqpsubscriber.Run("amqp://guest:guest@localhost:5672", func(message string) {
+	go amqpsubscriber.Run("amqp://guest:guest@localhost:5672", "event_send", func(message string) {
 		eventTest.message = message
 	})
 	return eventTest
 }
 
 func (test *eventTest) iSendRequestToWithData(method, addr string, data *gherkin.DocString) error {
+	return test.send(method, addr, data.Content)
+}
+
+func (test *eventTest) send(method, addr, data string) error {
 	switch method {
 	case http.MethodGet:
-		request := addr + "?" + data.Content
+		request := addr + "?" + data
 		response, err := http.Get(request)
 		if err != nil {
 			return fmt.Errorf("GET method failed: %s", err)
@@ -52,7 +57,7 @@ func (test *eventTest) iSendRequestToWithData(method, addr string, data *gherkin
 		return nil
 
 	case http.MethodPost:
-		response, err := http.Post(addr, "application/json", strings.NewReader(data.Content))
+		response, err := http.Post(addr, "application/json", strings.NewReader(data))
 		if err != nil {
 			return fmt.Errorf("POST method failed: %s", err)
 		}
@@ -111,20 +116,32 @@ func (test *eventTest) iReceiveEventWithData(body *gherkin.DocString) error {
 	return nil
 }
 
-func (test *eventTest) iSendRequestToWithNowPlusSecondsDateAndDescription(arg1, arg2 string, arg3 int, arg4 string) error {
-	return godog.ErrPending
+func (test *eventTest) iSendRequestToWithNowPlusSecondsDateAndDescription(method, addr string, seconds int, description string) error {
+	template := `{
+		"date":"$date",
+		"duration":5,
+		"description":"$description"
+	}`
+	location, _ := time.LoadLocation("UTC")
+	now := time.Now().In(location)
+	date := now.Add(time.Duration(seconds) * time.Second)
+	template = strings.Replace(template, "$date", date.Format("2006-01-02 15:04:05"), 1)
+	template = strings.Replace(template, "$description", description, 1)
+	return test.send(method, addr, template)
 }
 
-func (test *eventTest) iReceiveMessage(arg1 string) error {
-	return godog.ErrPending
+func (test *eventTest) iWaitSeconds(seconds int) error {
+	time.Sleep(time.Duration(seconds) * time.Second)
+	return nil
 }
 
-func (test *eventTest) iWaitSeconds(arg1 int) error {
-	return godog.ErrPending
-}
-
-func (test *eventTest) iGotMessage(arg1 string) error {
-	return godog.ErrPending
+func (test *eventTest) iReceiveMessage(message string) error {
+	tmp := test.message
+	test.message = ""
+	if tmp == message {
+		return nil
+	}
+	return fmt.Errorf("expected message does not match actual, %v != %v", message, tmp)
 }
 
 func FeatureContext(s *godog.Suite) {
@@ -138,5 +155,4 @@ func FeatureContext(s *godog.Suite) {
 	s.Step(`^I send "([^"]*)" request to "([^"]*)" with now plus (\d+) seconds date and description "([^"]*)"$`, test.iSendRequestToWithNowPlusSecondsDateAndDescription)
 	s.Step(`^I receive message "([^"]*)"$`, test.iReceiveMessage)
 	s.Step(`^I wait (\d+) seconds$`, test.iWaitSeconds)
-	s.Step(`^I got message "([^"]*)"$`, test.iGotMessage)
 }
